@@ -17,7 +17,13 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "http://localhost:8000", "data:"], // Allow backend and data URLs
+
+      imgSrc: [
+        "'self'",
+        "https://*.s3.amazonaws.com",
+        "https://*.s3.ap-south-1.amazonaws.com",
+        "data:",
+      ], // Allow backend and data URLs
       // Add other directives as needed for scripts, styles, etc.
     },
   })
@@ -51,6 +57,17 @@ app.use(
   },
   express.static(path.join(__dirname, "uploads"))
 );
+
+// 404 handler
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong" });
+});
 
 // 7. Start the server
 const PORT = process.env.PORT || 5000;
