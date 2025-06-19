@@ -26,7 +26,7 @@ app.use(
 // 3. CORS (before routes)
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -45,7 +45,7 @@ app.use("/api/v1/poll", pollRoutes);
 app.use(
   "/uploads",
   (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT_URL);
     res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     next();
   },
